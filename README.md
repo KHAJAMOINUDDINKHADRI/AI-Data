@@ -2,6 +2,11 @@
 
 A comprehensive Next.js web application that transforms messy spreadsheets into intelligent resource allocation configurations using AI-powered features.
 
+## 🌐 Live Demo
+
+**Try it now:** [https://ai-data-kmk.netlify.app](https://ai-data-kmk.netlify.app)
+
+
 ## Features
 
 ### 🚀 Core Functionality
