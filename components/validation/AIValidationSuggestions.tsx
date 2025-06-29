@@ -39,15 +39,16 @@ export function AIValidationSuggestions() {
   }, [clients.length, workers.length, tasks.length, errors.length]);
 
   const generateAISuggestions = async () => {
+    if (typeof window === "undefined") return;
     setIsGenerating(true);
 
     try {
-      console.log("Generating AI validation suggestions with data:", {
-        clientsCount: clients.length,
-        workersCount: workers.length,
-        tasksCount: tasks.length,
-        errorsCount: errors.length,
-      });
+      // console.log("Generating AI validation suggestions with data:", {
+      //   clientsCount: clients.length,
+      //   workersCount: workers.length,
+      //   tasksCount: tasks.length,
+      //   errorsCount: errors.length,
+      // });
 
       // Prepare messages for AI analysis
       const messages = [
@@ -88,7 +89,7 @@ Suggest 3-5 validation insights that would improve data quality and resource all
         },
       ];
 
-      console.log("Sending AI validation suggestions request with messages");
+      // console.log("Sending AI validation suggestions request with messages");
 
       const aiResponse = await fetch("/api/ai-chat", {
         method: "POST",
@@ -98,14 +99,14 @@ Suggest 3-5 validation insights that would improve data quality and resource all
         body: JSON.stringify({ messages }),
       });
 
-      console.log("AI response status:", aiResponse.status);
+      // console.log("AI response status:", aiResponse.status);
 
       if (!aiResponse.ok) {
         throw new Error(`HTTP error! status: ${aiResponse.status}`);
       }
 
       const data = await aiResponse.json();
-      console.log("AI response data:", data);
+      // console.log("AI response data:", data);
 
       if (data.success && data.data) {
         // Clean up the response - remove markdown code blocks if present
@@ -119,10 +120,10 @@ Suggest 3-5 validation insights that would improve data quality and resource all
           cleanData = cleanData.replace(/```\n?/g, "");
         }
 
-        console.log("Cleaned AI response:", cleanData);
+        // console.log("Cleaned AI response:", cleanData);
 
         const aiSuggestions = JSON.parse(cleanData);
-        console.log("Parsed AI suggestions:", aiSuggestions);
+        // console.log("Parsed AI suggestions:", aiSuggestions);
 
         const processedSuggestions = aiSuggestions.map((suggestion: any) => ({
           ...suggestion,

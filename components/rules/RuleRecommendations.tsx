@@ -48,11 +48,11 @@ export function RuleRecommendations() {
     setIsGenerating(true);
 
     try {
-      console.log("Generating AI recommendations with data:", {
-        clientsCount: clients.length,
-        workersCount: workers.length,
-        tasksCount: tasks.length,
-      });
+      // console.log("Generating AI recommendations with data:", {
+      //   clientsCount: clients.length,
+      //   workersCount: workers.length,
+      //   tasksCount: tasks.length,
+      // });
 
       // Prepare messages for AI analysis
       const messages = [
@@ -101,7 +101,7 @@ Suggest 3-5 business rules that would improve resource allocation efficiency. Re
         },
       ];
 
-      console.log("Sending AI recommendation request with messages");
+      // console.log("Sending AI recommendation request with messages");
 
       // Use AI service for intelligent recommendations
       const aiResponse = await fetch("/api/ai-chat", {
@@ -112,14 +112,14 @@ Suggest 3-5 business rules that would improve resource allocation efficiency. Re
         body: JSON.stringify({ messages }),
       });
 
-      console.log("AI response status:", aiResponse.status);
+      // console.log("AI response status:", aiResponse.status);
 
       if (!aiResponse.ok) {
         throw new Error(`HTTP error! status: ${aiResponse.status}`);
       }
 
       const data = await aiResponse.json();
-      console.log("AI response data:", data);
+      // console.log("AI response data:", data);
 
       if (data.success && data.data) {
         // Clean up the response - remove markdown code blocks if present
@@ -133,10 +133,10 @@ Suggest 3-5 business rules that would improve resource allocation efficiency. Re
           cleanData = cleanData.replace(/```\n?/g, "");
         }
 
-        console.log("Cleaned AI response:", cleanData);
+        // console.log("Cleaned AI response:", cleanData);
 
         const aiRecommendations = JSON.parse(cleanData);
-        console.log("Parsed AI recommendations:", aiRecommendations);
+        // console.log("Parsed AI recommendations:", aiRecommendations);
 
         const processedRecs = aiRecommendations.map((rec: any) => ({
           ...rec,
@@ -267,7 +267,7 @@ Suggest 3-5 business rules that would improve resource allocation efficiency. Re
   };
 
   const acceptRecommendation = (rec: Recommendation) => {
-    console.log("Accepting recommendation:", rec);
+    // console.log("Accepting recommendation:", rec);
 
     const rule = {
       id: `rec-${rec.id}`,
@@ -279,10 +279,10 @@ Suggest 3-5 business rules that would improve resource allocation efficiency. Re
       priority: rec.impact === "high" ? 8 : rec.impact === "medium" ? 5 : 3,
     };
 
-    console.log("Created rule from recommendation:", rule);
+    // console.log("Created rule from recommendation:", rule);
 
     addRule(rule);
-    console.log("Rule added successfully from recommendation");
+    // console.log("Rule added successfully from recommendation");
     dismissRecommendation(rec.id);
     toast.success("Rule added from AI recommendation");
   };

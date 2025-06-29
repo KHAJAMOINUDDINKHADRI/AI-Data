@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertTriangle,
@@ -107,7 +106,12 @@ export function ValidationPanel() {
         <CardContent>
           {isValidating && (
             <div className="mb-6 space-y-2">
-              <Progress value={validationProgress} className="w-full" />
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${validationProgress}%` }}
+                />
+              </div>
               <p className="text-sm text-center text-gray-600">
                 Running comprehensive validation... {validationProgress}%
               </p>

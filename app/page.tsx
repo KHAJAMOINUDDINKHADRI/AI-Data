@@ -58,7 +58,6 @@ export default function Home() {
                 </TabsList>
 
                 <TabsContent value="ingestion" className="space-y-6">
-                  <ValidationPanel />
                   <DataIngestionPanel />
                 </TabsContent>
 

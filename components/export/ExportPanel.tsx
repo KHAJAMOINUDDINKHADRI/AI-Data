@@ -1,17 +1,27 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Progress } from '@/components/ui/progress';
-import { Download, FileSpreadsheet, Settings, CheckCircle, AlertTriangle } from 'lucide-react';
-import { useData } from '@/lib/contexts/DataContext';
-import { useRules } from '@/lib/contexts/RulesContext';
-import { useValidation } from '@/lib/contexts/ValidationContext';
-import { toast } from 'sonner';
-import { exportToCSV, exportToXLSX, generateRulesJSON } from '@/lib/utils/exportUtils';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Download,
+  FileSpreadsheet,
+  Settings,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+import { useData } from "@/lib/contexts/DataContext";
+import { useRules } from "@/lib/contexts/RulesContext";
+import { useValidation } from "@/lib/contexts/ValidationContext";
+import { toast } from "sonner";
 
 export function ExportPanel() {
   const { clients, workers, tasks } = useData();
@@ -22,11 +32,11 @@ export function ExportPanel() {
   const [selectedFormats, setSelectedFormats] = useState({
     csv: true,
     xlsx: false,
-    rules: true
+    rules: true,
   });
 
-  const errorCount = errors.filter(e => e.type === 'error').length;
-  const warningCount = errors.filter(e => e.type === 'warning').length;
+  const errorCount = errors.filter((e) => e.type === "error").length;
+  const warningCount = errors.filter((e) => e.type === "warning").length;
   const totalRecords = clients.length + workers.length + tasks.length;
   const hasRules = rules.length > 0;
 
@@ -34,7 +44,7 @@ export function ExportPanel() {
 
   const handleExport = async () => {
     if (!canExport) {
-      toast.error('Cannot export with validation errors');
+      toast.error("Cannot export with validation errors");
       return;
     }
 
@@ -43,17 +53,22 @@ export function ExportPanel() {
 
     try {
       const progressSteps = [
-        { step: 20, message: 'Preparing data...' },
-        { step: 40, message: 'Generating files...' },
-        { step: 60, message: 'Creating archives...' },
-        { step: 80, message: 'Finalizing export...' },
-        { step: 100, message: 'Export complete!' }
+        { step: 20, message: "Preparing data..." },
+        { step: 40, message: "Generating files..." },
+        { step: 60, message: "Creating archives..." },
+        { step: 80, message: "Finalizing export..." },
+        { step: 100, message: "Export complete!" },
       ];
 
       for (const { step, message } of progressSteps) {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         setExportProgress(step);
       }
+
+      // Dynamically import exportUtils only when needed
+      const { exportToCSV, exportToXLSX, generateRulesJSON } = await import(
+        "@/lib/utils/exportUtils"
+      );
 
       // Generate exports based on selected formats
       if (selectedFormats.csv) {
@@ -66,23 +81,22 @@ export function ExportPanel() {
 
       if (selectedFormats.rules) {
         const rulesConfig = generateRulesJSON(rules, weights);
-        const blob = new Blob([JSON.stringify(rulesConfig, null, 2)], { 
-          type: 'application/json' 
+        const blob = new Blob([JSON.stringify(rulesConfig, null, 2)], {
+          type: "application/json",
         });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'rules-config.json';
+        a.download = "rules-config.json";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       }
 
-      toast.success('Export completed successfully!');
-
+      toast.success("Export completed successfully!");
     } catch (error) {
-      toast.error('Export failed');
+      toast.error("Export failed");
     } finally {
       setIsExporting(false);
       setTimeout(() => setExportProgress(0), 2000);
@@ -90,10 +104,11 @@ export function ExportPanel() {
   };
 
   const getStatusColor = () => {
-    if (errorCount > 0) return 'text-red-600 bg-red-50 border-red-200';
-    if (warningCount > 0) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-    if (totalRecords === 0) return 'text-gray-600 bg-gray-50 border-gray-200';
-    return 'text-green-600 bg-green-50 border-green-200';
+    if (errorCount > 0) return "text-red-600 bg-red-50 border-red-200";
+    if (warningCount > 0)
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    if (totalRecords === 0) return "text-gray-600 bg-gray-50 border-gray-200";
+    return "text-green-600 bg-green-50 border-green-200";
   };
 
   const getStatusIcon = () => {
@@ -103,10 +118,11 @@ export function ExportPanel() {
   };
 
   const getStatusMessage = () => {
-    if (errorCount > 0) return `${errorCount} errors must be fixed before export`;
+    if (errorCount > 0)
+      return `${errorCount} errors must be fixed before export`;
     if (warningCount > 0) return `${warningCount} warnings (export allowed)`;
-    if (totalRecords === 0) return 'No data to export';
-    return 'Ready for export';
+    if (totalRecords === 0) return "No data to export";
+    return "Ready for export";
   };
 
   return (
@@ -153,11 +169,14 @@ export function ExportPanel() {
                 <Checkbox
                   id="csv"
                   checked={selectedFormats.csv}
-                  onCheckedChange={(checked) => 
-                    setSelectedFormats(prev => ({ ...prev, csv: !!checked }))
+                  onCheckedChange={(checked) =>
+                    setSelectedFormats((prev) => ({ ...prev, csv: !!checked }))
                   }
                 />
-                <label htmlFor="csv" className="flex items-center space-x-2 cursor-pointer">
+                <label
+                  htmlFor="csv"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <FileSpreadsheet className="h-4 w-4" />
                   <span>CSV Files (clients.csv, workers.csv, tasks.csv)</span>
                 </label>
@@ -167,11 +186,14 @@ export function ExportPanel() {
                 <Checkbox
                   id="xlsx"
                   checked={selectedFormats.xlsx}
-                  onCheckedChange={(checked) => 
-                    setSelectedFormats(prev => ({ ...prev, xlsx: !!checked }))
+                  onCheckedChange={(checked) =>
+                    setSelectedFormats((prev) => ({ ...prev, xlsx: !!checked }))
                   }
                 />
-                <label htmlFor="xlsx" className="flex items-center space-x-2 cursor-pointer">
+                <label
+                  htmlFor="xlsx"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <FileSpreadsheet className="h-4 w-4" />
                   <span>Excel Workbook (data-alchemist.xlsx)</span>
                 </label>
@@ -181,11 +203,17 @@ export function ExportPanel() {
                 <Checkbox
                   id="rules"
                   checked={selectedFormats.rules}
-                  onCheckedChange={(checked) => 
-                    setSelectedFormats(prev => ({ ...prev, rules: !!checked }))
+                  onCheckedChange={(checked) =>
+                    setSelectedFormats((prev) => ({
+                      ...prev,
+                      rules: !!checked,
+                    }))
                   }
                 />
-                <label htmlFor="rules" className="flex items-center space-x-2 cursor-pointer">
+                <label
+                  htmlFor="rules"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <Settings className="h-4 w-4" />
                   <span>Rules Configuration (rules-config.json)</span>
                 </label>
@@ -195,16 +223,25 @@ export function ExportPanel() {
 
           {isExporting && (
             <div className="space-y-2">
-              <Progress value={exportProgress} className="w-full" />
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${exportProgress}%` }}
+                />
+              </div>
               <p className="text-sm text-center text-gray-600">
                 Exporting... {exportProgress}%
               </p>
             </div>
           )}
 
-          <Button 
+          <Button
             onClick={handleExport}
-            disabled={!canExport || isExporting || !Object.values(selectedFormats).some(Boolean)}
+            disabled={
+              !canExport ||
+              isExporting ||
+              !Object.values(selectedFormats).some(Boolean)
+            }
             className="w-full"
             size="lg"
           >
@@ -259,12 +296,14 @@ export function ExportPanel() {
               </div>
               <div className="flex justify-between">
                 <span>Active Rules:</span>
-                <Badge variant="outline">{rules.filter(r => r.enabled).length}</Badge>
+                <Badge variant="outline">
+                  {rules.filter((r) => r.enabled).length}
+                </Badge>
               </div>
               <div className="flex justify-between">
                 <span>Weight Config:</span>
-                <Badge variant={hasRules ? 'default' : 'secondary'}>
-                  {hasRules ? 'Ready' : 'Default'}
+                <Badge variant={hasRules ? "default" : "secondary"}>
+                  {hasRules ? "Ready" : "Default"}
                 </Badge>
               </div>
             </div>
@@ -279,20 +318,20 @@ export function ExportPanel() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Errors:</span>
-                <Badge variant={errorCount > 0 ? 'destructive' : 'outline'}>
+                <Badge variant={errorCount > 0 ? "destructive" : "outline"}>
                   {errorCount}
                 </Badge>
               </div>
               <div className="flex justify-between">
                 <span>Warnings:</span>
-                <Badge variant={warningCount > 0 ? 'secondary' : 'outline'}>
+                <Badge variant={warningCount > 0 ? "secondary" : "outline"}>
                   {warningCount}
                 </Badge>
               </div>
               <div className="flex justify-between">
                 <span>Status:</span>
-                <Badge variant={canExport ? 'default' : 'destructive'}>
-                  {canExport ? 'Ready' : 'Issues'}
+                <Badge variant={canExport ? "default" : "destructive"}>
+                  {canExport ? "Ready" : "Issues"}
                 </Badge>
               </div>
             </div>

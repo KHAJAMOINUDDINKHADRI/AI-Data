@@ -20,6 +20,7 @@ export function NaturalLanguageSearch() {
     useData();
 
   const handleSearch = async () => {
+    if (typeof window === "undefined") return;
     if (!query.trim()) return;
     setIsSearching(true);
 
@@ -82,12 +83,12 @@ Respond with JSON only, no other text.`,
         },
       ];
 
-      console.log("Sending search request with data:", {
-        query,
-        clientsCount: clients.length,
-        workersCount: workers.length,
-        tasksCount: tasks.length,
-      });
+      // console.log("Sending search request with data:", {
+      //   query,
+      //   clientsCount: clients.length,
+      //   workersCount: workers.length,
+      //   tasksCount: tasks.length,
+      // });
 
       const response = await fetch("/api/ai-chat", {
         method: "POST",
@@ -100,7 +101,7 @@ Respond with JSON only, no other text.`,
       }
 
       const aiResult = await response.json();
-      console.log("AI response received:", aiResult);
+      // console.log("AI response received:", aiResult);
 
       if (aiResult.success && aiResult.data) {
         // Try to parse the AI response as JSON
@@ -118,10 +119,10 @@ Respond with JSON only, no other text.`,
           }
 
           parsedResponse = JSON.parse(cleanData);
-          console.log("Parsed AI response:", parsedResponse);
+          // console.log("Parsed AI response:", parsedResponse);
         } catch (parseError) {
-          console.log("AI response was not JSON, using fallback processing");
-          console.log("Raw AI response:", aiResult.data);
+          // console.log("AI response was not JSON, using fallback processing");
+          // console.log("Raw AI response:", aiResult.data);
           // Fallback to basic processing
           const fallbackResult = processNaturalLanguageQuery(query, {
             clients,

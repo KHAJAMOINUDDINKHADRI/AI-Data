@@ -64,7 +64,7 @@ export function NaturalLanguageRules() {
     setParsedRule(null);
 
     try {
-      console.log("Processing natural language rule:", text);
+      // console.log("Processing natural language rule:", text);
 
       const context = {
         clients: clients.slice(0, 5),
@@ -72,11 +72,11 @@ export function NaturalLanguageRules() {
         tasks: tasks.slice(0, 5),
       };
 
-      console.log("Context data:", {
-        clientsCount: context.clients.length,
-        workersCount: context.workers.length,
-        tasksCount: context.tasks.length,
-      });
+      // console.log("Context data:", {
+      //   clientsCount: context.clients.length,
+      //   workersCount: context.workers.length,
+      //   tasksCount: context.tasks.length,
+      // });
 
       const messages = [
         {
@@ -121,7 +121,7 @@ export function NaturalLanguageRules() {
         },
       ];
 
-      console.log("Sending request to AI with messages:", messages);
+      // console.log("Sending request to AI with messages:", messages);
 
       const aiResponse = await fetch("/api/ai-chat", {
         method: "POST",
@@ -131,14 +131,14 @@ export function NaturalLanguageRules() {
         body: JSON.stringify({ messages }),
       });
 
-      console.log("AI response status:", aiResponse.status);
+      // console.log("AI response status:", aiResponse.status);
 
       if (!aiResponse.ok) {
         throw new Error(`HTTP error! status: ${aiResponse.status}`);
       }
 
       const data = await aiResponse.json();
-      console.log("AI response data:", data);
+      // console.log("AI response data:", data);
 
       if (data.success && data.data) {
         // Clean up the response - remove markdown code blocks if present
@@ -152,10 +152,10 @@ export function NaturalLanguageRules() {
           cleanData = cleanData.replace(/```\n?/g, "");
         }
 
-        console.log("Cleaned AI response:", cleanData);
+        // console.log("Cleaned AI response:", cleanData);
 
         const parsed = JSON.parse(cleanData);
-        console.log("Parsed rule:", parsed);
+        // console.log("Parsed rule:", parsed);
 
         setParsedRule(parsed);
         toast.success("Rule parsed successfully!");
@@ -254,7 +254,7 @@ export function NaturalLanguageRules() {
   const acceptRule = () => {
     if (!parsedRule) return;
 
-    console.log("Accepting rule:", parsedRule);
+    // console.log("Accepting rule:", parsedRule);
 
     // Map AI response to expected rule format
     const rule = {
@@ -267,11 +267,11 @@ export function NaturalLanguageRules() {
       priority: parsedRule.confidence > 0.8 ? 7 : 5,
     };
 
-    console.log("Created rule object:", rule);
+    // console.log("Created rule object:", rule);
 
     try {
       addRule(rule);
-      console.log("Rule added successfully");
+      // console.log("Rule added successfully");
       setParsedRule(null);
       setRuleText("");
       toast.success("Rule added successfully");

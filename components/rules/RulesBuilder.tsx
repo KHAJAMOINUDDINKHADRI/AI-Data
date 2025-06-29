@@ -24,13 +24,13 @@ export function RulesBuilder() {
   const { clients, workers, tasks } = useData();
 
   // Debug logging
-  console.log("RulesBuilder - Current rules:", rules);
-  console.log("RulesBuilder - Rules count:", rules.length);
+  // console.log("RulesBuilder - Current rules:", rules);
+  // console.log("RulesBuilder - Rules count:", rules.length);
 
   // Monitor rules changes
-  useEffect(() => {
-    console.log("RulesBuilder - Rules changed:", rules);
-  }, [rules]);
+  // useEffect(() => {
+  //   console.log("RulesBuilder - Rules changed:", rules);
+  // }, [rules]);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingRule, setEditingRule] = useState<string | null>(null);
@@ -253,7 +253,7 @@ export function RulesBuilder() {
                   enabled: true,
                   priority: 5,
                 };
-                console.log("Adding test rule:", testRule);
+                // console.log("Adding test rule:", testRule);
                 addRule(testRule);
               }}
             >

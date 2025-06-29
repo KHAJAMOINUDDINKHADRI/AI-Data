@@ -55,10 +55,10 @@ export function RulesProvider({ children }: { children: ReactNode }) {
   });
 
   const addRule = (rule: Rule) => {
-    console.log("Adding rule to context:", rule);
+    // console.log("Adding rule to context:", rule);
     setRules((prev) => {
       const newRules = [...prev, rule];
-      console.log("Updated rules array:", newRules);
+      // console.log("Updated rules array:", newRules);
       return newRules;
     });
   };

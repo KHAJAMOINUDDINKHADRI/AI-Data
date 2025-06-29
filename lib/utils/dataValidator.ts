@@ -131,9 +131,9 @@ export async function validateAndMapData(
       let value = row[originalCol];
 
       // Debug log for RequestedTaskIDs
-      if (mappedCol === "RequestedTaskIDs") {
-        console.log("Raw RequestedTaskIDs value:", value);
-      }
+      // if (mappedCol === "RequestedTaskIDs") {
+      //   console.log("Raw RequestedTaskIDs value:", value);
+      // }
 
       // Transform values based on expected format
       if (
@@ -160,9 +160,9 @@ export async function validateAndMapData(
           value = [];
         }
         // Debug log after splitting
-        if (mappedCol === "RequestedTaskIDs") {
-          console.log("Parsed RequestedTaskIDs array:", value);
-        }
+        // if (mappedCol === "RequestedTaskIDs") {
+        //   console.log("Parsed RequestedTaskIDs array:", value);
+        // }
       } else if (
         mappedCol.includes("Level") ||
         mappedCol.includes("Duration") ||

@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import {
   Upload,
@@ -12,7 +11,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useData } from "@/lib/contexts/DataContext";
-import { parseCSVFile, parseXLSXFile } from "@/lib/utils/fileParser";
 import { validateAndMapData } from "@/lib/utils/dataValidator";
 import React from "react";
 
@@ -44,6 +42,11 @@ export function FileUpload() {
         const progressInterval = setInterval(() => {
           setUploadProgress((prev) => Math.min(prev + 10, 90));
         }, 100);
+
+        // Dynamically import fileParser only when needed
+        const { parseCSVFile, parseXLSXFile } = await import(
+          "@/lib/utils/fileParser"
+        );
 
         if (file.name.endsWith(".csv")) {
           data = await parseCSVFile(file);
@@ -159,7 +162,12 @@ export function FileUpload() {
 
             {isUploading && (
               <div className="space-y-2">
-                <Progress value={uploadProgress} className="w-full" />
+                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-2 bg-blue-500"
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
                 <p className="text-sm text-center text-gray-600">
                   Processing with AI intelligence... {uploadProgress}%
                 </p>
@@ -195,16 +203,14 @@ export function FileUpload() {
           description="ClientID, Name, Priority, Tasks, etc."
           dataType="clients"
         />
-
         <FileUploadCard
           title="Workers Data"
-          description="WorkerID, Name, Skills, Slots, etc."
+          description="WorkerID, Name, Skills, Availability, etc."
           dataType="workers"
         />
-
         <FileUploadCard
           title="Tasks Data"
-          description="TaskID, Name, Duration, Skills, etc."
+          description="TaskID, Name, Duration, Requirements, etc."
           dataType="tasks"
         />
       </div>
