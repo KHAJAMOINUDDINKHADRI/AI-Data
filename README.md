@@ -33,8 +33,8 @@ A comprehensive Next.js web application that transforms messy spreadsheets into 
 1. **Clone and Install**
 
    ```bash
-   git clone <repository>
-   cd data-alchemist
+   git clone https://github.com/KHAJAMOINUDDINKHADRI/AI-Data.git
+   cd AI-Data
    npm install
    ```
 
@@ -42,7 +42,7 @@ A comprehensive Next.js web application that transforms messy spreadsheets into 
    Create `.env.local` file in the root directory:
 
    ```env
-   # Required for AI functionality - Get from https://openrouter.ai/
+   # Required for AI functionality - Get from https://openrouter.ai/ for FREE
    OPENROUTER_API_KEY=your_openrouter_api_key_here
 
    # Optional: Customize AI model (default is free tier)
@@ -63,22 +63,6 @@ A comprehensive Next.js web application that transforms messy spreadsheets into 
    npm run dev
    ```
 
-## Troubleshooting
-
-### AI Search Not Working
-
-If you see "Search failed" errors:
-
-1. **Check Environment Variables**: Ensure `.env.local` file exists with `OPENROUTER_API_KEY`
-2. **API Key Valid**: Verify your OpenRouter API key is valid and has credits
-3. **Network Issues**: Check if you can access https://openrouter.ai
-4. **Fallback Mode**: The app will use basic search if AI is unavailable
-
-### Common Issues
-
-- **404 Errors**: Make sure you're running `npm run dev` (not static export)
-- **API Key Errors**: Check OpenRouter dashboard for key validity
-- **Rate Limits**: Free tier has usage limits, consider upgrading
 
 ## AI Integration
 
@@ -130,14 +114,3 @@ The application uses DeepSeek AI through OpenRouter for:
 - **Slot Restriction**: Limit common slots for groups
 - **Precedence**: Priority-based rule ordering
 - **Pattern Match**: Regex-based rule matching
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Implement changes with tests
-4. Submit pull request
-
-## License
-
-MIT License - see LICENSE file for details
